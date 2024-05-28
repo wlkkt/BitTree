@@ -3,97 +3,101 @@
 
 namespace bit
 {
-template<size_t N>
-class bitset
-{
-public:
-//构造一个大小能够放下所有无符号整数状态位图的整型数组，初始时所有元素均为0 => 所有bit位均为0
-bitset()
-{
-	//无符号整型和整型都是四个字节大小
-	_bits.resize(N / 32 + 1, 0);
-	//一个整型 = 4 个字节
-	//一字节 = 8 个比特位
-	// 一个整型 = 4 * 8 个比特位
-	//N个无符号整型数，需要32 * N 个比特位
-	//+1向上取整，防止不够
-}
-
-// 把x映射的位标记成1
-void set(size_t x)
-{
-	assert(x <= N);//x应该小于等于N，防止无法映射成功
-
-	size_t i = x / 32;//计算无符号整数x映射在第i个整型的32个比特位上
-	size_t j = x % 32;//计算具体应该放在第j位比特位上
-
-	_bits[i] |= (1 << j);//将1移动到目标位置，然后在与原整型的32个比特位做或运算
-}
-
-// 把x映射的位标记成0
-void reset(size_t x)
-{
-	assert(x <= N);//x应该小于等于N，防止无法映射成功
-
-	size_t i = x / 32;//计算无符号整数x映射在第i个整型的32个比特位上
-	size_t j = x % 32;//计算具体应该放在第j位比特位上
-
-	_bits[i] &= ~(1 << j);//将1移动到目标位置并取反，然后在与原整型的32个比特位做与运算
-}
-
-//检查是否存在
-bool test(size_t x)
-{
-	assert(x <= N);
-
-	size_t i = x / 32;
-	size_t j = x % 32;
-
-	return _bits[i] & (1 << j);
-}
-
-private:
-	vector<int> _bits;
-};
-
-//测试函数
-void test_bitset()
-{
-	//实例化一个100
-	bitset<100> bs1;
-	bs1.set(50);
-	bs1.set(30);
-	bs1.set(90);
-
-	for (size_t i = 0; i < 100; i++)
+	template<size_t N>
+	class bitset
 	{
-		if (bs1.test(i))
-		{
-			cout << i << "->" << "在" << endl;
-		}
-		else
-		{
-			cout << i << "->" << "不在" << endl;
-		}
-	}
-	bs1.reset(90);
-	bs1.set(91);
-
-	cout << endl << endl;
-
-	for (size_t i = 0; i < 100; i++)
+	public:
+	//构造一个大小能够放下所有无符号整数状态位图的整型数组，初始时所有元素均为0 => 所有bit位均为0
+	bitset()
 	{
-		if (bs1.test(i))
-		{
-			cout << i << "->" << "在" << endl;
-		}
-		else
-		{
-			cout << i << "->" << "不在" << endl;
-		}
+		//无符号整型和整型都是四个字节大小
+		_bits.resize(N / 32 + 1, 0);
+		//一个整型 = 4 个字节
+		//一字节 = 8 个比特位
+		// 一个整型 = 4 * 8 个比特位
+		//N个无符号整型数，需要32 * N 个比特位
+		//+1向上取整，防止不够
 	}
 
-}
+	// 把x映射的位标记成1
+	void set(size_t x)
+	{
+		assert(x <= N);//x应该小于等于N，防止无法映射成功
+
+		size_t i = x / 32;//计算无符号整数x映射在第i个整型的32个比特位上
+		size_t j = x % 32;//计算具体应该放在第j位比特位上
+
+		_bits[i] |= (1 << j);//将1移动到目标位置，然后在与原整型的32个比特位做或运算
+	}
+
+	// 把x映射的位标记成0
+	void reset(size_t x)
+	{
+		assert(x <= N);//x应该小于等于N，防止无法映射成功
+
+		size_t i = x / 32;//计算无符号整数x映射在第i个整型的32个比特位上
+		size_t j = x % 32;//计算具体应该放在第j位比特位上
+
+		_bits[i] &= ~(1 << j);//将1移动到目标位置并取反，然后在与原整型的32个比特位做与运算
+	}
+
+	//检查是否存在
+	bool test(size_t x)
+	{
+		assert(x <= N);
+
+		size_t i = x / 32;
+		size_t j = x % 32;
+
+		return _bits[i] & (1 << j);
+	}
+
+	private:
+		vector<int> _bits;
+	};
+
+	//测试函数
+	void test_bitset()
+	{
+		//实例化一个100
+		bitset<100> bs1;
+		bs1.set(50);
+		bs1.set(30);
+		bs1.set(90);
+
+		for (size_t i = 0; i < 100; i++)
+		{
+			if (bs1.test(i))
+			{
+				cout << i << "->" << "在" << endl;
+			}
+			else
+			{
+				cout << i << "->" << "不在" << endl;
+			}
+		}
+		bs1.reset(90);
+		bs1.set(91);
+
+		cout << endl << endl;
+
+		for (size_t i = 0; i < 100; i++)
+		{
+			if (bs1.test(i))
+			{
+				cout << i << "->" << "在" << endl;
+			}
+			else
+			{
+				cout << i << "->" << "不在" << endl;
+			}
+		}
+
+		//以下三种都可以表示四十亿个位图
+	/*	bitset<-1> bs2;
+		bitset<UINT_MAX> bs3;
+		bitset<0xffffffff> bs4;*/
+	}
 
 	template<size_t N>
 	class two_bit_set
