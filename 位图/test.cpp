@@ -8,6 +8,7 @@ using namespace std;
 
 int main()
 {
-	bit::test_bitset();
+	//bit::test_bitset();
+	bit::test_bitset2();
 	return 0;
 }

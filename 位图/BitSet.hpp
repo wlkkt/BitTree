@@ -99,77 +99,65 @@ namespace bit
 		bitset<0xffffffff> bs4;*/
 	}
 
-	template<size_t N>
-	class two_bit_set
+template<size_t N>
+class two_bit_set
+{
+public:
+	//修改比特位上的0和1
+	void set(size_t x)
 	{
-	public:
-		void set(size_t x)
+		// 00 -> 01
+		if (_bs1.test(x) == false
+			&& _bs2.test(x) == false)
 		{
-			// 00 -> 01
-			if (_bs1.test(x) == false
-				&& _bs2.test(x) == false)
-			{
-				_bs2.set(x);
-			}
-			else if (_bs1.test(x) == false
-				&& _bs2.test(x) == true)
-			{
-				// 01 -> 10
-				_bs1.set(x);
-				_bs2.reset(x);
-			}
+			_bs2.set(x);//_bs2位图的将第x位变为1
 		}
-
-		//int test(size_t x)
-		//{
-		//	if (_bs1.test(x) == false
-		//		&& _bs2.test(x) == false)
-		//	{
-		//		return 0;
-		//	}
-		//	else if (_bs1.test(x) == false
-		//		&& _bs2.test(x) == true)
-		//	{
-		//		return 1;
-		//	}
-		//	else
-		//	{
-		//		return 2; // 2次及以上
-		//	}
-		//}
-		bool test(size_t x)
+		// 01 -> 10
+		else if (_bs1.test(x) == false
+			&& _bs2.test(x) == true)
 		{
-			if (_bs1.test(x) == false
-				&& _bs2.test(x) == true)
-			{
-				return true;
-			}
-
-			return false;
-		}
-	private:
-		bitset<N> _bs1;
-		bitset<N> _bs2;
-	};
-
-	void test_bitset2()
-	{
-		int a[] = { 5,7,9,2,5,99,5,5,7,5,3,9,2,55,1,5,6 };
-		two_bit_set<100> bs;
-		for (auto e : a)
-		{
-			bs.set(e);
-		}
-
-		for (size_t i = 0; i < 100; i++)
-		{
-			//cout << i << "->" << bs.test(i) << endl;
-			if (bs.test(i))
-			{
-				cout << i << endl;
-			}
+			_bs1.set(x);//_bs1位图的将第x位变为1
+			_bs2.reset(x);//_bs2位图的将第x位变为0
 		}
 	}
+
+
+	//检测某数是否只出现一次，即01
+	bool test(size_t x)
+	{
+		if (_bs1.test(x) == false
+			&& _bs2.test(x) == true)
+		{
+			return true;
+		}
+		return false;
+	}
+
+private:
+	//定义两个缺省值为N的位图，即初始时有N个位的位图
+	bitset<N> _bs1;
+	bitset<N> _bs2;
+};
+
+void test_bitset2()
+{
+	int a[] = { 5,7,9,2,5,99,5,5,7,5,3,9,2,55,1,5,6 };
+	two_bit_set<100> bs;
+	//依据数组a遍历修改两个位图中的位
+	for (auto e : a)
+	{
+		bs.set(e);
+	}
+
+	for (size_t i = 0; i < 100; i++)
+	{
+		//打印只出现一次的数
+		if (bs.test(i))
+		{
+			cout << i << endl;
+		}
+	}
+}
 
 	void test_bitset3()
 	{
